@@ -1,35 +1,44 @@
 const launches = require('./launches.mongo');
+const planets = require('./planets.mongo');
 
-let latestFlightNumber = 100;
+const DEFAULT_FLIGHT_NUMBER = 0;
 
-function findAll() {
-  return Array.from(launches.values());
+async function findAll() {
+  return await launches.find({}, { _id: 0, __v: 0 });
+}
+
+async function getFlightNumber() {
+  const latestData = await launches.findOne().sort('-flightNumber');
+  if (!latestData) {
+    return DEFAULT_FLIGHT_NUMBER;
+  }
+  return latestData.flightNumber;
 }
 
 function findById(launchId) {
   return launches.has(launchId);
 }
 
-async function saveLaunch(launch) {
-  await launches.updateOne(
+async function save(launch) {
+  const planet = await planets.findOne({
+    keplerName: launch.target,
+  });
+  if (!planet) {
+    return new Error('Planet not found');
+  }
+  const latestFlightNumber = (await getFlightNumber()) + 1;
+  const launchData = Object.assign(launch, {
+    success: true,
+    upcoming: true,
+    customers: ['NASA'],
+    flightNumber: latestFlightNumber,
+  });
+  await launches.findOneAndUpdate(
     {
-      flightNumber: launch.flightNumber,
+      flightNumber: launchData.flightNumber,
     },
-    launch,
+    launchData,
     { upsert: true }
-  );
-}
-
-function save(launch) {
-  latestFlightNumber++;
-  launches.set(
-    latestFlightNumber,
-    Object.assign(launch, {
-      success: true,
-      upcoming: true,
-      customers: ['NASA BD'],
-      flightNumber: latestFlightNumber,
-    })
   );
 }
 

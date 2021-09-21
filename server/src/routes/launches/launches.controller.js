@@ -5,11 +5,11 @@ const {
   destroy,
 } = require('../../models/launch.model');
 
-function fetchAll(req, res) {
-  return res.status(200).json(findAll());
+async function fetchAll(req, res) {
+  return res.status(200).json(await findAll());
 }
 
-function add(req, res) {
+async function add(req, res) {
   const launch = req.body;
   if (
     !launch.mission ||
@@ -24,8 +24,7 @@ function add(req, res) {
   if (isNaN(launch.launchDate)) {
     return res.status(400).json({ error: 'Invalid launch date.' });
   }
-
-  save(launch);
+  await save(launch);
   return res.status(201).json(launch);
 }
 

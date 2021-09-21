@@ -10,7 +10,7 @@ const launchesSchema = new mongoose.Schema({
     required: true,
   },
 
-  missions: {
+  mission: {
     type: String,
     required: true,
   },
