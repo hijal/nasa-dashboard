@@ -28,14 +28,18 @@ async function add(req, res) {
   return res.status(201).json(launch);
 }
 
-function remove(req, res) {
+async function remove(req, res) {
   let launchId = +req.params.id;
-  if (!findById(launchId)) {
+
+  const isExist = await findById(launchId);
+  if (!isExist) {
     return res.json(404).json({ error: 'launch not found.' });
   }
-  const abortLaunch = destroy(launchId);
-
-  return res.status(200).json(abortLaunch);
+  const aborted = await destroy(launchId);
+  if (!aborted) {
+    return res.status(400).json({ error: `Launch not found!` });
+  }
+  return res.status(200).json({ ok: true });
 }
 
 module.exports = {

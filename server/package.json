@@ -10,6 +10,9 @@
     "watch": "node ./src/server.js",
     "cluster": "pm2 start ./src/server.js -i max"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

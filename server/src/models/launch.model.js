@@ -15,8 +15,10 @@ async function getFlightNumber() {
   return latestData.flightNumber;
 }
 
-function findById(launchId) {
-  return launches.has(launchId);
+async function findById(launchId) {
+  return await launches.findOne({
+    flightNumber: launchId,
+  });
 }
 
 async function save(launch) {
@@ -42,11 +44,14 @@ async function save(launch) {
   );
 }
 
-function destroy(launchId) {
-  const aborted = launches.get(launchId);
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+async function destroy(launchId) {
+  const aborted = await launches.updateOne(
+    {
+      flightNumber: launchId,
+    },
+    { upcoming: false, success: false }
+  );
+  return aborted.modifiedCount === 1 && aborted.matchedCount === 1;
 }
 
 module.exports = {
