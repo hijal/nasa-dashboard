@@ -5,8 +5,12 @@ const {
   destroy,
 } = require('../../models/launch.model');
 
+const { getPagination } = require('../../configs/query');
+
 async function fetchAll(req, res) {
-  return res.status(200).json(await findAll());
+  const {skip, limit} = getPagination(req.query);
+  const launches = await findAll(skip, limit);
+  return res.status(200).json(launches);
 }
 
 async function add(req, res) {
