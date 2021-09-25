@@ -79,7 +79,7 @@ async function findById(launchId) {
   });
 }
 
-async function save() {
+async function save(launch) {
   const planet = await planets.findOne({
     keplerName: launch.target,
   });

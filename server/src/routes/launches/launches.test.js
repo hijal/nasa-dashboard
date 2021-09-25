@@ -1,15 +1,17 @@
 const request = require('supertest');
 const app = require('../../app');
 const { mongoConnection, mongoDisconnect } = require('../../configs/mongo.db');
+const { loadPlanets } = require('../../models/planets.model');
 
 describe('Launches API', () => {
   beforeAll(async () => {
     await mongoConnection();
+    await loadPlanets();
   });
-  
+
   afterAll(async () => {
     await mongoDisconnect();
-  })
+  });
 
   describe('Test GET /launches', () => {
     test('It should respond with 201 status code', async () => {
