@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/hijal/nasa-dashboard/badge.svg?branch=main)](https://coveralls.io/github/hijal/nasa-dashboard?branch=main)
 # nasa-dashboard
 > exploring NASA exoplanet archive data.
 
